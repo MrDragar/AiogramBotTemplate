@@ -1,4 +1,4 @@
-from typing import Callable, overload
+from typing import Callable
 
 from provider import Provider, T
 
@@ -9,4 +9,3 @@ class Singleton(Provider[T]):
 
     def __call__(self) -> T:
         return self._provides
-
