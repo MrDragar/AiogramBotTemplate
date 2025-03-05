@@ -5,7 +5,7 @@ T = TypeVar("T")
 
 
 class Provider(ABC, Generic[T]):
-    _provides: Callable | object
+    _provides: Callable[..., T] | T
 
     def __init__(self, provides: Callable[..., T] | T):
         self._provides = provides
