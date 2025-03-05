@@ -13,5 +13,8 @@ class Factory(Provider[T]):
         self.__kwargs = kwargs
 
     def __call__(self) -> Callable[..., T] | T:
-        return self._provides(*self.__args, **self.__kwargs)
+        return self._provides(
+            *self._provide_args(*self.__args),
+            **self._provide_kwargs(**self.__kwargs)
+        )
 
