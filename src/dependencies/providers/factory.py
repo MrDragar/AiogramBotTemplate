@@ -1,6 +1,6 @@
 from typing import Callable, Any
 
-from provider import Provider, T
+from .provider import Provider, T
 
 
 class Factory(Provider[T]):

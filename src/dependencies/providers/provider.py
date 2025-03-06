@@ -12,7 +12,7 @@ class Provider(ABC, Generic[T]):
         self._provides = provides
 
     @abstractmethod
-    def __call__(self) -> Callable[..., T] | T | Awaitable[Any, Any, T]:
+    def __call__(self) -> Callable[..., T] | T | Awaitable[T]:
         ...
 
     @staticmethod

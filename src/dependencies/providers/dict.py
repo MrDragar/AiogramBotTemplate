@@ -1,6 +1,6 @@
 from typing import Any
 
-from provider import Provider
+from .provider import Provider
 
 
 class Dict(Provider[dict]):

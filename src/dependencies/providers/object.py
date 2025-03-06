@@ -1,4 +1,4 @@
-from provider import Provider, T
+from .provider import Provider, T
 
 
 class Object(Provider[T]):

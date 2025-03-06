@@ -1,6 +1,6 @@
 from typing import Callable
 
-from provider import Provider, T
+from .provider import Provider, T
 
 
 class Singleton(Provider[T]):

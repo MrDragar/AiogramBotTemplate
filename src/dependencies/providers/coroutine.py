@@ -1,7 +1,7 @@
 from typing import Callable, Coroutine as _Coroutine, Any, Awaitable
 import asyncio
 
-from provider import Provider, T
+from .provider import Provider, T
 
 
 class Coroutine(Provider[Callable[..., Awaitable[T]]]):

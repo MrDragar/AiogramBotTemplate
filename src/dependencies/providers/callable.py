@@ -1,4 +1,4 @@
-from provider import Provider, T
+from .provider import Provider, T
 from typing import Callable as _Callable, Any
 
 
