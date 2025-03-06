@@ -1,5 +1,6 @@
+import asyncio
 from abc import ABC, abstractmethod
-from typing import Callable, Generic, TypeVar
+from typing import Callable, Generic, TypeVar, Coroutine, Any, Awaitable
 
 T = TypeVar("T")
 
@@ -7,11 +8,11 @@ T = TypeVar("T")
 class Provider(ABC, Generic[T]):
     _provides: Callable[..., T] | T
 
-    def __init__(self, provides: Callable[..., T] | T):
+    def __init__(self, provides: Callable[..., T] | T | Coroutine[Any, Any, T]):
         self._provides = provides
 
     @abstractmethod
-    def __call__(self) -> Callable[..., T] | T:
+    def __call__(self) -> Callable[..., T] | T | Awaitable[Any, Any, T]:
         ...
 
     @staticmethod
