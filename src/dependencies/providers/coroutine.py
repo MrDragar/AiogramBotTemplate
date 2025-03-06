@@ -11,5 +11,5 @@ class Coroutine(Provider[Callable[..., Awaitable[T]]]):
         super().__init__(provides)
         self.__kwargs = kwargs
 
-    def __call__(self) -> Awaitable[T]:
-        return self._provides(**self._provide_kwargs(**self.__kwargs))
+    def __call__(self, *args, **kwargs) -> Awaitable[T]:
+        return self._provides(*args, **kwargs, **self._provide_kwargs(**self.__kwargs))
