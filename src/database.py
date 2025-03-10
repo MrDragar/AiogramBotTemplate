@@ -1,3 +1,4 @@
+from asyncio import current_task
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
@@ -16,13 +17,17 @@ class Database:
     __database_session: async_scoped_session
 
     def __init__(self, db_url: str):
-        self.engine = create_async_engine(db_url, echo=True)
-        self.session_maker = async_sessionmaker(
-            bind=self.engine,
+        self.__engine = create_async_engine(
+            self.get_sqlite_url(db_url), echo=True
+        )
+        self.__session_maker = async_sessionmaker(
+            bind=self.__engine,
             autoflush=False,
             class_=AsyncSession
         )
-        self.__database_session = async_scoped_session()
+        self.__database_session = async_scoped_session(
+            self.__session_maker, current_task
+        )
 
     @asynccontextmanager
     async def session(self) -> AsyncGenerator[AsyncSession]:
@@ -37,4 +42,8 @@ class Database:
 
     async def create_database(self):
         async with self.__engine.begin() as conn:
-            await conn.run_async(Base.metadata.create_all)
+            await conn.run_sync(Base.metadata.create_all)
+
+    @staticmethod
+    def get_sqlite_url(db_path) -> str:
+        return f"sqlite+aiosqlite:///{db_path}"

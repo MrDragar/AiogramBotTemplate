@@ -16,6 +16,7 @@ async def main():
     )
     bot = Bot(token=config.API_TOKEN)
     container = Container()
+    await container.database().create_database()
     dp = Dispatcher(**container.providers)
     dp.include_router(root_router)
     await bot.delete_webhook()
