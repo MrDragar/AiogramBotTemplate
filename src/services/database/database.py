@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from asyncio import current_task
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
@@ -11,7 +12,18 @@ from sqlalchemy.orm import declarative_base, DeclarativeBase
 Base: DeclarativeBase = declarative_base()
 
 
-class Database:
+class IDatabase(ABC):
+    @abstractmethod
+    @asynccontextmanager
+    async def session(self) -> AsyncGenerator[AsyncSession]:
+        ...
+
+    @abstractmethod
+    async def create_database(self) -> None:
+        ...
+
+
+class Database(IDatabase):
     __engine: AsyncEngine
     __session_maker: async_sessionmaker
     __database_session: async_scoped_session

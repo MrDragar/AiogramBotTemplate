@@ -1,6 +1,8 @@
 from src.dependencies import DeclarativeContainer, providers
-from src.database import Database
+from src.services.database.database import Database, IDatabase
 
 
 class Container(DeclarativeContainer):
-    database = providers.Singleton(Database, "db.sqlite3")
+    database: providers.Singleton[IDatabase] = providers.Singleton(
+        Database, "db.sqlite3"
+    )
