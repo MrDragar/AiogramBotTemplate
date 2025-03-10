@@ -1,5 +1,5 @@
-import providers
-from declarative_container import DeclarativeContainer
+from . import providers
+from .declarative_container import DeclarativeContainer
 
 
 __all__ = [

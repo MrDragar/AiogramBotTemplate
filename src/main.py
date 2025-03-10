@@ -4,6 +4,7 @@ from aiogram import Bot, Dispatcher
 
 from src.handlers import router as root_router
 from src import config
+from src.containers import Container
 
 
 async def main():
@@ -14,7 +15,8 @@ async def main():
         filemode="a"
     )
     bot = Bot(token=config.API_TOKEN)
-    dp = Dispatcher()
+    container = Container()
+    dp = Dispatcher(**container.providers)
     dp.include_router(root_router)
     await bot.delete_webhook()
     await dp.start_polling(bot)
