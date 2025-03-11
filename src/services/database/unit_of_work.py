@@ -20,13 +20,14 @@ class IUnitOfWork(ABC):
 
 
 class UnitOfWork(IUnitOfWork):
-    current_session = ContextVar('current_session')
+    current_session: ContextVar[AsyncSession | None] =\
+        ContextVar('current_session', default=None)
 
     def __init__(self, database: IDatabase):
         self.database = database
 
     @asynccontextmanager
-    async def atomic(self) -> AsyncGenerator[None]:
+    async def atomic(self) -> AsyncGenerator[None, None]:
         async with self.database.create_session() as session:
             token = self.current_session.set(session)
             try:
