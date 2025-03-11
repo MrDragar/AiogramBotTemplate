@@ -1,20 +1,21 @@
 import enum
 
 from sqlalchemy import Column, Integer, String, Enum
+from sqlalchemy.orm import Mapped
 
 from .database import Base
 
 
-class Languages(enum.Enum):
+class Language(enum.Enum):
     english = 'en'
     russian = 'ru'
     ukrainian = 'uk'
 
 
 class User(Base):
-    id = Column("id", Integer, primary_key=True)
-    username = Column("username", String, nullable=True)
-    fullname = Column("fullname", String)
-    language = Column("language", Enum(Languages), default=Languages.english)
+    id: Mapped[int] = Column("id", Integer, primary_key=True)
+    username: Mapped[str] = Column("username", String, nullable=True)
+    fullname: Mapped[str] = Column("fullname", String)
+    language: Mapped[Language] = Column("language", Enum(Language), default=Language.english)
 
     __tablename__ = "users"

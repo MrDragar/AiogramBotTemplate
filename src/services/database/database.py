@@ -37,13 +37,10 @@ class Database(IDatabase):
             autoflush=False,
             class_=AsyncSession
         )
-        self.__database_session = async_scoped_session(
-            self.__session_maker, current_task
-        )
 
     @asynccontextmanager
     async def session(self) -> AsyncGenerator[AsyncSession]:
-        session = self.__database_session()
+        session = self.__session_maker()
         try:
             yield session
         except Exception as ex:
