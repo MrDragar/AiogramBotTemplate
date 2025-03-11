@@ -3,10 +3,10 @@ from abc import ABC, abstractmethod
 from sqlalchemy import select
 
 from .models import User, Language
-from .iservice import IService, BaseService
+from .unit_of_work import IUnitOfWork
 
 
-class IUserService(IService, ABC):
+class IUserService(ABC):
     @abstractmethod
     async def create_user(
             self, id: int, username: str | None,
@@ -19,7 +19,10 @@ class IUserService(IService, ABC):
         ...
 
 
-class UserService(BaseService, IUserService):
+class UserService(IUserService):
+    def __init__(self, uow: IUnitOfWork):
+        self.uow = uow
+
     async def create_user(
             self, user_id: int, username: str | None,
             fullname: str, language: Language
@@ -27,13 +30,13 @@ class UserService(BaseService, IUserService):
         user = User(
             id=user_id, username=username, fullname=fullname, language=Language
         )
-        self._get_session().add(user)
-        await self._get_session().commit()
+        self.uow.get_session().add(user)
+        await self.uow.get_session().commit()
         return user
 
     async def get_user_language(self, user_id: int) -> Language:
         stmt = select(User).where(User.id == user_id)
-        user = await self._get_session().scalar(stmt)
+        user = await self.uow.get_session().scalar(stmt)
         if user is None:
             raise ValueError("User not found")
         return user.language

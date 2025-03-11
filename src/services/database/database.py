@@ -1,7 +1,4 @@
 from abc import ABC, abstractmethod
-from asyncio import current_task
-from contextlib import asynccontextmanager
-from typing import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import (
     async_sessionmaker, create_async_engine, AsyncSession,
@@ -14,8 +11,7 @@ Base: DeclarativeBase = declarative_base()
 
 class IDatabase(ABC):
     @abstractmethod
-    @asynccontextmanager
-    async def session(self) -> AsyncGenerator[AsyncSession]:
+    def create_session(self) -> AsyncSession:
         ...
 
     @abstractmethod
@@ -38,16 +34,8 @@ class Database(IDatabase):
             class_=AsyncSession
         )
 
-    @asynccontextmanager
-    async def session(self) -> AsyncGenerator[AsyncSession]:
-        session = self.__session_maker()
-        try:
-            yield session
-        except Exception as ex:
-            await session.rollback()
-            raise ex
-        finally:
-            await session.close()
+    def create_session(self) -> AsyncSession:
+        return self.__session_maker()
 
     async def create_database(self):
         async with self.__engine.begin() as conn:
@@ -56,3 +44,4 @@ class Database(IDatabase):
     @staticmethod
     def get_sqlite_url(db_path) -> str:
         return f"sqlite+aiosqlite:///{db_path}"
+
