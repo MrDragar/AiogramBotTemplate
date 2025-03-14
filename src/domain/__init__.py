@@ -1,7 +1,8 @@
-from . import entities, interfaces
+from . import entities, interfaces, exceptions
 
 
 __all__ = [
     'entities',
-    'interfaces'
+    'interfaces',
+    'exceptions'
 ]
