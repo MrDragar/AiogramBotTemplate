@@ -4,6 +4,8 @@ from .provider import Provider, T
 
 
 class Singleton(Provider[T]):
+    _provides: T
+
     def __init__(self, provides: Callable[..., T], *args, **kwargs):
         super().__init__(
             provides(

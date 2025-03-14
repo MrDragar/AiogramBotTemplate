@@ -2,8 +2,9 @@ from .provider import Provider, T
 from typing import Callable as _Callable, Any
 
 
-class Callable(Provider[_Callable[..., T]]):
-    __kwargs:  dict[Any, ...]
+class Callable(Provider[T]):
+    __kwargs:  dict[str, Any]
+    _provides: _Callable[..., T]
 
     def __init__(self, provides: _Callable[..., T], **kwargs):
         super().__init__(provides)

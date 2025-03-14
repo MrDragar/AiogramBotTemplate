@@ -1,14 +1,15 @@
-import asyncio
 from abc import ABC, abstractmethod
-from typing import Callable, Generic, TypeVar, Coroutine, Any, Awaitable
+from typing import Callable, Generic, TypeVar, Any, Awaitable
 
 T = TypeVar("T")
 
 
 class Provider(ABC, Generic[T]):
-    _provides: Callable[..., T] | T
+    _provides: Callable[..., T] | T | Callable[..., Awaitable[T]]
 
-    def __init__(self, provides: Callable[..., T] | T | Coroutine[Any, Any, T]):
+    def __init__(
+            self, provides: Callable[..., T] | T | Callable[..., Awaitable[T]]
+    ):
         self._provides = provides
 
     @abstractmethod
@@ -16,11 +17,11 @@ class Provider(ABC, Generic[T]):
         ...
 
     @staticmethod
-    def _provide_args(*args):
+    def _provide_args(*args) -> list[Any]:
         return [arg() if isinstance(arg, Provider) else arg for arg in args]
 
     @staticmethod
-    def _provide_kwargs(**kwargs):
+    def _provide_kwargs(**kwargs) -> dict[str, Any]:
         return {
             key: value() if isinstance(value, Provider) else value
             for key, value in kwargs.items()

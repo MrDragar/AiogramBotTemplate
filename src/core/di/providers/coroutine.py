@@ -4,8 +4,9 @@ import asyncio
 from .provider import Provider, T
 
 
-class Coroutine(Provider[Callable[..., Awaitable[T]]]):
+class Coroutine(Provider[T]):
     __kwargs: dict[str, Any]
+    _provides: Callable[..., Awaitable[T]]
 
     def __init__(self, provides: Callable[..., Awaitable[T]], **kwargs):
         super().__init__(provides)
