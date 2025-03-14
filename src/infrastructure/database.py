@@ -2,11 +2,13 @@ from sqlalchemy.ext.asyncio import (
     async_sessionmaker, create_async_engine, AsyncSession,
     async_scoped_session, AsyncEngine
 )
-from sqlalchemy.orm import declarative_base, DeclarativeBase
+from sqlalchemy.orm import DeclarativeBase
 
 from src.infrastructure.interfaces import IDatabase
 
-Base: DeclarativeBase = declarative_base()
+
+class Base(DeclarativeBase):
+    ...
 
 
 class Database(IDatabase):
