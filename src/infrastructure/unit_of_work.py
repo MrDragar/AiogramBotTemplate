@@ -1,25 +1,14 @@
-from abc import abstractmethod, ABC
 from contextlib import asynccontextmanager
 from contextvars import ContextVar
 from typing import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.services.database.database import IDatabase
+from src.infrastructure.database import IDatabase
+from src.infrastructure.interfaces import IDatabaseUnitOfWork
 
 
-class IUnitOfWork(ABC):
-    @abstractmethod
-    @asynccontextmanager
-    async def atomic(self) -> AsyncGenerator[AsyncSession]:
-        ...
-
-    @abstractmethod
-    def get_session(self) -> AsyncSession:
-        ...
-
-
-class UnitOfWork(IUnitOfWork):
+class UnitOfWork(IDatabaseUnitOfWork):
     current_session: ContextVar[AsyncSession | None] =\
         ContextVar('current_session', default=None)
 

@@ -3,8 +3,8 @@ import logging
 from aiogram import Bot, Dispatcher
 
 from src.handlers import router as root_router
-from src import config
-from src.containers import Container
+from src.core import config
+from src.core.containers import Container
 
 
 async def main():

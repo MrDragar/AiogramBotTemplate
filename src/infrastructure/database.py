@@ -1,22 +1,12 @@
-from abc import ABC, abstractmethod
-
 from sqlalchemy.ext.asyncio import (
     async_sessionmaker, create_async_engine, AsyncSession,
     async_scoped_session, AsyncEngine
 )
 from sqlalchemy.orm import declarative_base, DeclarativeBase
 
+from src.infrastructure.interfaces import IDatabase
+
 Base: DeclarativeBase = declarative_base()
-
-
-class IDatabase(ABC):
-    @abstractmethod
-    def create_session(self) -> AsyncSession:
-        ...
-
-    @abstractmethod
-    async def create_database(self) -> None:
-        ...
 
 
 class Database(IDatabase):

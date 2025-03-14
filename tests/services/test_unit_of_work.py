@@ -5,8 +5,8 @@ from unittest.mock import Mock, AsyncMock
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.services.database.database import IDatabase
-from src.services.database.unit_of_work import UnitOfWork
+from src.infrastructure.database import IDatabase
+from src.infrastructure.unit_of_work import UnitOfWork
 
 
 class AsyncContextManager:
