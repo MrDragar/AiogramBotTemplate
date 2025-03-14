@@ -1,17 +1,16 @@
-from sqlalchemy import Column, Integer, String, Enum
-from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import Mapped, mapped_column
 
-from src.infrastructure.database import Base
 from src.domain.entities.user import Language, User
+from src.infrastructure.database import Base
 
 
 class UserORM(Base):
     __tablename__ = "users"
 
-    id: Mapped[int] = Column("id", Integer, primary_key=True)
-    username: Mapped[str] = Column("username", String, nullable=True)
-    fullname: Mapped[str] = Column("fullname", String)
-    language: Mapped[Language] = Column("language", Enum(Language), default=Language.ENGLISH)
+    id: Mapped[int] = mapped_column("id", primary_key=True)
+    username: Mapped[str] = mapped_column("username", nullable=True)
+    fullname: Mapped[str] = mapped_column("fullname")
+    language: Mapped[Language] = mapped_column("language", default=Language.ENGLISH)
 
     def to_domain(self) -> User:
         return User(
