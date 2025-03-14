@@ -2,7 +2,8 @@ import asyncio
 import logging
 from aiogram import Bot, Dispatcher
 
-from src.handlers import router as root_router
+from src.application.handlers import router as root_router
+from src.application.middlewares import DIProvideMiddleware
 from src.core import config
 from src.core.containers import Container
 
@@ -17,7 +18,9 @@ async def main():
     bot = Bot(token=config.API_TOKEN)
     container = Container()
     await container.database().create_database()
-    dp = Dispatcher(**container.providers)
+    di_middleware = DIProvideMiddleware(container)
+    dp = Dispatcher()
+    dp.update.register(di_middleware)
     dp.include_router(root_router)
     await bot.delete_webhook()
     await dp.start_polling(bot)
