@@ -1,14 +1,12 @@
 from abc import ABC, abstractmethod
-from contextlib import asynccontextmanager
-from typing import AsyncGenerator
+from contextlib import _AsyncGeneratorContextManager
 
 from .entities import User
 
 
 class IUnitOfWork(ABC):
     @abstractmethod
-    @asynccontextmanager
-    async def atomic(self) -> AsyncGenerator[None, None]:
+    def atomic(self) -> _AsyncGeneratorContextManager[None, None]:
         ...
 
 

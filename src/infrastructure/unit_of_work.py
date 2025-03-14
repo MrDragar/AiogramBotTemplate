@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 from contextvars import ContextVar
-from typing import AsyncGenerator
+from typing import AsyncGenerator, Never
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -20,7 +20,7 @@ class UnitOfWork(IDatabaseUnitOfWork):
         async with self.database.create_session() as session:
             token = self.current_session.set(session)
             try:
-                yield
+                yield None
                 await session.commit()
             except Exception:
                 await session.rollback()
